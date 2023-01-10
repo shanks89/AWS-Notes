@@ -1,0 +1,217 @@
+AWS Cloud Practitoner Notes:
+ EC2 -> Auto Scaling -> Elastic Load Balancer -> SNS / SQS .
+ 
+ 1. EC2:
+		Server, available in multiple instance types based upon purpose and performance and pricing, widly used is on demand
+		on-demand-pay only how much used
+		Vertical scaling - increse the size of instance.
+		Horizontal scaling - increase the no of instances.
+2. Auto Scaling:
+		Couple / De-Couple additional EC2 servers to the applications depends upon loads to make its availabilty better.
+		Minimun, Desired, Maximum
+		De-Couples when load is adequated.
+		
+3. ELB:
+		Divide the load to availble EC2 servers and aviods the over loading and idle time of EC2 servers
+		can be operate external loads and internal loads,
+		ie.,Takes requests from external users and divides equally and send the same to available servers.
+		Takes requests from EC2 inernally and send the same to available to resources.
+		xx- if EC2 servers increse, all available servie should incresase to aviod the conflict.
+
+4. Queing - SNS or SQS:
+		if two applications communicate each other is called tightly coupled. in this case if one app failes it 
+		may lead to loss data or crash the entire sysytem.
+		To avoid such confilcts, applications should build lossly-coupled.i.e., app1-> que -> app2.
+		so that que can receive, store, send messages. it is called micro services.
+		SNS - publish/subscribe method, ower can publish messages to a SNS topic and customer who subscribed the SNS topic can receive notifications.
+		
+5. AWS Lambda:
+		Serverless(FaaS) which means we cannot see servers, maintaining, scaling and etc can be managed by lambda itself.
+		Upload code - set trigger from event source - code runs only wn triggered - pay for compute time.
+		i.e., we write resize code and uploaded it on lambda - code triggers wn image uploads - code runs for rezize the image.
+		Trigger may be a event source, AWS services i.e, EC2, S3 etc.,HTTP.
+		
+		AWS Elastic Container Service
+		AWS Kubarnetes Service
+		AWS Fargate
+		
+6. AWS Regions:
+		AWS Regions are geographically seperated groups.
+		AWS has built multiple Regions to ensure availability. Each regions has Availability Zone(AZ) and each AZs has one or more Data Centers in it.
+		each regions must have more than one AZs at a certain distance with low latency.
+	AWS Edge Locations:
+		a global content deliver service.
+		if a company is in brazil and customes are from chine, in this case we can use aws cloud front rather the moving to china region.
+		Edge loactions rus with AWS Cloudfront, cashe and copy of files will stored in a cloudfront and customer from china can get those data faster.
+	AWS Outposts:
+		Extends aws indrastructure and servuces to your on-premices data centers.
+		Enables us to run infracture in hybrid cloud approach.
+	
+7. Intracting with AWS Services:
+		1.Amazon Management Console - web based and allows us to do servces manually deploy and monitor.
+		2.AWS Coomand Line Interface(CLI) - command based, minimze the human error and requires scrots line execute the services.
+		3.AWS SDK - Software development kit. Helps us to intract with services.
+		4..AWS Elastic Bean Stak(EBS) - EC2 insance based, allows us to write a code and configure services to adjust capacity, load balancing, 
+		auto scaling and monitoring.-Fully automated EC2 service.
+		5.Amazon Cloud Formation - (IaaS) - provides infrastructure as service and allows us to create multiple servies as code or text.
+		fully automated and reusable. -XX-
+
+8.Virtual Private Cloud:
+		Establish dedicated boundaries to aws resources. nothing goes in or out without certain permission.
+		Dedicated virtual cloud, allow us to launch aws resorces in a isolated cloud by VPN.
+		inside VPC thers is section called Subnet that can contan aws resources such as EC2.
+		Subnet - is a partition of VPC, we can launch aws resources in it and can create gateway to that subnet.
+		
+	Internet Gatwway (IGW):
+		Provies gate to a VPC to public traffic.
+	
+	VPN :
+		Virtual Private Network - Virtual Private Gateway establish VPN to connect VPC from on-premics resources and datacenters.
+		VPN allows protected traffic into VPC.
+	
+	AWS Direct Connection:
+		Private Connection from on-prem to VPC, established by fibre cables.
+		Increase bandwidth od a connection.
+
+9. Subnets:
+		Subnets are section of VPC, aws resources can be grouped inside a subnet based upon security groups.
+		Subnets can private or public. 
+		Public Subnet - contan aws resources that are accecible by public. ex-e-store.
+		Private Subnet - contains aws resources that are accessibel by private traffic, ex - DB contains customer details, order history.
+		public and private subnet can communicate each other EC2 runs in public subnet can communicate private DB in a same VPC.
+		Each subnets runs under ACL or Security Group.
+		
+10. Seurity Group:
+		Resource level security, or instance level security, i.e.,EC2 can be configured inside security groups which is inside a subnet which is inside a VPC.
+		Statful Security like door man. have some memeory in it and it remebers items that pass through.so wn leaving the instance,
+		it allows items without checking.
+		while create security group, il will deny all inbound and outbound actions by default.
+		
+11.Network Access Control List(ACL):
+		Subnet level virtual firewall
+		when launch VPC, ACL can be created by default but it allow packets ingoing and outgoing without and restrictions untill we set our
+		permissions to our ACL, we can also have custom ACL, but it restrict all in and out packets untill we set permissions in it.
+		Stateless Security, checks each time like passport officer wheather item is present in allowed list or not.
+		
+12. Route 53:
+		Highly available and scalable DNS service.
+		Route53 is DNS(Domani Name System) DNS Resolution service that provides IP address to any given domanin name or website name.
+		i,e.,www.aws.amazon.com ---> 191.1.1.90 - Translates domain name into IP address.
+		Route53 also does traffic routing to certain routing policies.
+		
+13. AWS Storage Services:
+		When we launch EC2 instance, EC2 comes with local storage called instabce storage.
+		When we sto EC2 instance, the data that we stored in instance storage will be deleted.
+		So its best advised to store onlt temp datas.
+		We can attach some external storage available in AWS like EBS, S3..
+		
+	Elastic Block Store(EBS): 
+		EBS is one of storage services in AWS. max size is 16TB, SSD by defalut and has HDD option.
+		Provides block storage and avl in different sizes and purpose.
+		privided block storage, i.e., if we upload 80GB of vide file and want to do some small correction, the file in EBS has stored as 
+		block storage i.e, 5GB in each block hence we made anychange, that particular block gets updated rather than entore 80GB updated. thats
+		why S3 has max object upload size of 5GB.
+		can be attached to EC2, and can withstand stop and start interupption.
+		snapshot - a service used to backup the datas that are stored in EBS.
+		
+	AWS Simple Storage Service (S3) :
+		S3 is a god of storage service available in AWS. serverless and limiless storage. regionly adistributed (global) and has backup in 3 AZs.
+		Unlimited in size and each object max size is 5TB.
+		S3 stores datas as objects while EBS stores datas as block storage. and we need to upload that 80GB flile again whenever we need to make changes.
+		An Object contains - File, Metadata and key. Here., File - actual file, Metadata - contains information about the file,
+		wn it was created, size  and etc., Key - indetifier of the file.
+		S3 can host static websites since S3 buckets and objects comes with urls.
+		S3 has versioning, we can have multiple versions of a file and its a delete prevention.
+		S3 Lifecycle Policy: We can set S3 lifecycle policy to same some cost. i.e., data can be stores 90 initially later it should
+		moved to S3-IA and certain time it should moved to S3 Glacier
+		Max object size in S3 bucks are 5TB / Object.
+		-XX- S3 availble in  different tiering / classes options based upon purpose and pricing.
+		1. S3 Standard : High avilabilty and cost, stores data in min 3 AZs. designed for frequently accecible datas.
+			also S3 Standard offers 11 9s of durability. S3 Standard is 99.999999999% Durable and High cost.
+		2. S3 Standard-Infrequent access (S3 Standard IA): availabile as same as S3 Standard also stored in min 3AZs, but low storage price and high
+			retrival price. suits for data infrequently accesed and highly available.i.e., websites,.
+		3. S3 Standard One Zone IA: it stores data in single AZ. lower price than S3 IA. we can choose oneIA if want ro save cost and 
+			data can be easily reproduce if single AZ failed.
+		4. S3 Intelligent Tiering: if data was not accessed 30 days it moves data to S3-IA and if accessed the bring back to S3-STD.
+			suitable for unkown or cahange access patterns. and requires monitoring and automation costs.
+		5. S3 Glacier Instant Retrival: Archived storage and retrives data within millisecs as same prformance as S3-STD.
+		6. S3 Glacier Flexible Retrival: low cost, aable to retirive datas within few mins to few hours.
+			suitable for retrive customer old photos videos and etc.,
+		7. S3 Glacier Deep Archive: low cost storage in the cloud, suits for data accessed once in a year or two, has supports long-term
+			retention and digital prevention for datas. able to retrive datas in 12-48 hrs.
+		8. S3 Outposts: delivers storage to on-prem environment.
+	
+	Amzon Elastic File Sysytem:
+		Used to access the stored file from different AZs while EBS allows single AZs.
+		Autimatically scalable.
+		
+14. Amazon RDBMS:
+		Relational Data Base Management Systems - is provides RDS service in AWS.
+		RDS cab be queried by SQL.
+		RDS Engines are Amazon Aurora, Postgre SQL, My SQL, Oracle, Microsoft SQL, Maria DB
+		AWS RDS comes with security, aurto patches, DB setup, Backup, Encryption while store and Transit.
+	
+	Amazon Aurora:
+		Comapatiable with My SQL and Postgre SQL.
+		5 Times faster than std My SQL and 3 Times faster than std Postgre SQL.
+		Aurora replicated six copies of datas acress AZs and continiously backups data to S3.
+		
+	Dynamo DB:
+		Dynamo DB is Serverless and auto scaling.
+		Dynamo DB is Non-Relational Database Sysytem.
+		Dynamo DB is No-SQL Database.
+		It is built for purpose case and has millisecond responce time.able to handle millions of traffic.
+		Dynamo DB stores datas in table as key value pairs or items and attributes pairs. so that we can add remove items at any time.
+		we can use simple queries by keys to fetch datas rather than complex queries to fetch datas from multiple tables.
+		not suitable for buisssness alaytics and suitable to non complex joints and mllisec responce.
+		
+	Amazon Redshift:
+		A Data Ware House - able to collect daats from diffferent resources.
+		Redshift can be used to handle big data BI solutions.
+		
+15. Data Migration Services:
+		DMS used to migrate datas from existing on-prem to AWS or Existing AWS DB to another AWS DB for disaster recovery, backup and etc.,
+		The source is fully functional while migration happens.
+		1.Homogeneous Migration: same source--> DMS --> same target
+		2.Hetrogeneous Migration: Different source--> scheme conversion tool--> DMS --> Different target.
+		Tyoes:
+		1.Development and Test database migrations.
+		2.Database Consolidation - small DBs migrated to one big DB by DMS. combining several DBs into Single DB.
+		3.Contineous Database Replication - Diaster Recovery.
+	
+	
+ELastic Container Service (ECS) - 
+
+AWS API Gateway - Used to create RESTFUL APIs in AWS.
+
+AWS Internet of Things (IoT) - 
+	
+16. AWS Shared Resonsibility Model:
+		Which means AWS env secured by both customer and AWS, customer resonsibility (security) is like biuilding owner whilw AWS is the builder
+		that house.
+		
+	Identiyy Access Managemment (IAM): Authentication and Authoriziation as Service (AaaS)
+		Most imortant factor in AWS which controls all the user, access, Permissions and role.
+		By default IAM has no permissions and accces, we have to set when we create.
+		IAM User - Person or application that intract with aws services and it contains user and credintials.
+		IAM Policy - is a document (JSON) whcih contains permissions and effect can be assigned to IAM user. Each policy has two effects, allow or deny.
+		IAM Group - Collection or Group of IAM users, we can attach poicy to over a IAM group to grant permissions to all the IAM users in a group.
+		i.e., - if a cashier moved to inventory, we can remove him from cashier group and add him to inventory group which has contains to inventory policies.
+		this ensures user only have the permissions that are required.
+		IAM Role - if a person needs to take different jobs he required all the permissions, IAM role alows users to switch between roles,
+		at first, we should grant permission to switch roles.
+		While switching roles, user will get only the current role permissions, and previous role permissions will be revoked.
+		i.e., if cashier moved to inventory, he willl be able to access only inventory and all the previous roles will be revoked.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
